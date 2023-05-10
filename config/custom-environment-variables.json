@@ -6,5 +6,21 @@
   "host": "HOSTNAME",
   "authentication": {
     "secret": "FEATHERS_SECRET"
+  },
+  "postgresql": {
+    "client": "pg",
+    "connection": "PG_CONN_STRING"
+  },
+  "elasticsearch": {
+    "node": "ES_NODE",
+    "searchIndex": "articles",
+    "auth": {
+      "username": "ES_USERNAME",
+      "password": "ES_PASSWORD"
+    },
+    "useSecure": {
+      "__name": "ES_USE_SECURE",
+      "__format": "boolean"
+    }
   }
 }
