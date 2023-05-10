@@ -8,8 +8,11 @@ export class SearchService {
   async find(_params) {
     const config = this.app.get('elasticsearch');
     const elasticSearch = this.app.get('elasticClient');
+    console.log(_params.query);
     const data = await elasticSearch.search({
       index: config.index,
+      from: _params.query.from ? _params.query.from : 0,
+      size: _params.query.size ? _params.query.size : 10,
       query: {
         multi_match: {
           query: _params.query.q,

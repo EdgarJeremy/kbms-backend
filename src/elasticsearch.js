@@ -6,10 +6,10 @@ export const elasticSearch = (app) => {
   const elasticClient = new Client({
     node: config.node,
     auth: config.auth,
-    tls: {
+    tls: config.useSecure ? {
       ca: fs.readFileSync('./certs/elasticsearch.crt'),
       rejectUnauthorized: false
-    }
+    } : undefined
   });
   app.set('elasticClient', elasticClient);
 }

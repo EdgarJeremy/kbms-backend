@@ -9,6 +9,10 @@
     "auth": {
       "username": "ES_USERNAME",
       "password": "ES_PASSWORD"
+    },
+    "useSecure": {
+      "__name": "ES_USE_SECURE",
+      "__format": "boolean"
     }
   }
 }
