@@ -1,0 +1,14 @@
+{
+  "postgresql": {
+    "client": "pg",
+    "connection": "PG_CONN_STRING"
+  },
+  "elasticsearch": {
+    "node": "ES_NODE",
+    "searchIndex": "articles",
+    "auth": {
+      "username": "ES_USERNAME",
+      "password": "ES_PASSWORD"
+    }
+  }
+}
