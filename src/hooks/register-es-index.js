@@ -11,7 +11,11 @@ export const registerEsIndex = async (context) => {
     id: article.id,
     document: {
       headline: article.headline,
-      content: stripHtml(article.content).result,
+      content: stripHtml(article.content_raw).result,
+      user_id: article.user_id,
+      department_id: article.department_id,
+      access_level: article.access_level,
+      allowed_departments: article.allowed_departments
     }
   });
   console.log(articleDocument);

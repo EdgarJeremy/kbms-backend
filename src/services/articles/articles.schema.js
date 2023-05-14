@@ -3,6 +3,7 @@ import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { userSchema } from '../users/users.schema.js';
+import { departmentsSchema } from '../departments/departments.schema.js'
 
 // Main data model schema
 export const articlesSchema = Type.Object(
@@ -10,8 +11,13 @@ export const articlesSchema = Type.Object(
     id: Type.Number(),
     headline: Type.String(),
     content: Type.String(),
+    content_raw: Type.String(),
     user_id: Type.Number(),
-    user: Type.Ref(userSchema)
+    user: Type.Ref(userSchema),
+    department_id: Type.Optional(Type.Number()),
+    department: Type.Ref(departmentsSchema),
+    access_level: Type.Union([Type.Literal('internal'), Type.Literal('public')]),
+    allowed_departments: Type.Array(Type.Number())
   },
   { $id: 'Articles', additionalProperties: false }
 )
@@ -21,13 +27,18 @@ export const articlesResolver = resolve({
     if (data.user_id)
       return await context.app.service('users').get(data.user_id);
     return null;
+  }),
+  department: virtual(async (data, context) => {
+    if (data.department_id)
+      return await context.app.service('departments').get(data.department_id)
+    return null;
   })
 })
 
 export const articlesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'content'], {
+export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'content', 'content_raw', 'access_level', 'content_raw'], {
   $id: 'ArticlesData'
 })
 export const articlesDataValidator = getValidator(articlesDataSchema, dataValidator)
@@ -43,7 +54,7 @@ export const articlesPatchValidator = getValidator(articlesPatchSchema, dataVali
 export const articlesPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content'])
+export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'department_id', 'access_level'])
 export const articlesQuerySchema = Type.Intersect(
   [
     querySyntax(articlesQueryProperties),
