@@ -31,7 +31,7 @@ export class SearchService {
           query: `*${_params.query.q}*`,
           fields: ['headline^2', 'content']
         },
-        bool: conds
+        // bool: conds
       }
     });
     return data;
