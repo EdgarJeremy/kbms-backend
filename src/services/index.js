@@ -1,3 +1,7 @@
+import { tags } from './tags/tags.js'
+
+import { categories } from './categories/categories.js'
+
 import { search } from './search/search.js'
 
 import { images } from './images/images.js'
@@ -9,6 +13,10 @@ import { articles } from './articles/articles.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(tags)
+
+  app.configure(categories)
+
   app.configure(search)
 
   app.configure(images)

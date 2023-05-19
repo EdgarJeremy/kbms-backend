@@ -22,7 +22,7 @@
       "username": "elastic",
       "password": "zgoGtvnxMZQ1PQ9Wv8TL"
     },
-    "useSecure": true
+    "useSecure": false
   },
   "authentication": {
     "entity": "users",

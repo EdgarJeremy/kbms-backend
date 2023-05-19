@@ -4,6 +4,8 @@ import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { userSchema } from '../users/users.schema.js';
 import { departmentsSchema } from '../departments/departments.schema.js'
+import { categoriesSchema } from '../categories/categories.schema.js'
+import { tagsSchema } from '../tags/tags.schema.js';
 
 // Main data model schema
 export const articlesSchema = Type.Object(
@@ -16,6 +18,10 @@ export const articlesSchema = Type.Object(
     user: Type.Ref(userSchema),
     department_id: Type.Optional(Type.Number()),
     department: Type.Ref(departmentsSchema),
+    category_id: Type.Number(),
+    category: Type.Ref(categoriesSchema),
+    tag_id: Type.Number(),
+    tag: Type.Ref(tagsSchema),
     access_level: Type.Union([Type.Literal('internal'), Type.Literal('public')]),
     allowed_departments: Type.Array(Type.Number())
   },
@@ -31,6 +37,16 @@ export const articlesResolver = resolve({
   department: virtual(async (data, context) => {
     if (data.department_id)
       return await context.app.service('departments').get(data.department_id)
+    return null;
+  }),
+  category: virtual(async (data, context) => {
+    if(data.category_id)
+      return await context.app.service('categories').get(data.category_id)
+    return null;
+  }),
+  tag: virtual(async (data, context) => {
+    if(data.tag_id)
+      return await context.app.service('tags').get(data.tag_id);
     return null;
   })
 })
