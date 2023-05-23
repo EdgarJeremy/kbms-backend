@@ -1,3 +1,5 @@
+import { articleTags } from './article-tags/article-tags.js'
+
 import { tags } from './tags/tags.js'
 
 import { categories } from './categories/categories.js'
@@ -13,6 +15,8 @@ import { articles } from './articles/articles.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(articleTags)
+
   app.configure(tags)
 
   app.configure(categories)

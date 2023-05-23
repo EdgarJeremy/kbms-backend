@@ -16,13 +16,13 @@
     "connection": "postgres://postgres:sirius@localhost:5432/kbms-backend"
   },
   "elasticsearch": {
-    "node": "https://10.211.55.6:9200",
+    "node": "https://localhost:9200",
     "searchIndex": "articles",
     "auth": {
       "username": "elastic",
-      "password": "zgoGtvnxMZQ1PQ9Wv8TL"
+      "password": "c_VfTx+M=3na3TO-6tZZ"
     },
-    "useSecure": false
+    "useSecure": true
   },
   "authentication": {
     "entity": "users",

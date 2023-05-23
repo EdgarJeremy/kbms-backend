@@ -2,11 +2,23 @@ import { stripHtml } from 'string-strip-html';
 
 export const registerEsIndex = async (context) => {
   const app = context.app;
-  const config = app.get('elasticsearch');
   const article = context.result;
-  const elasticClient = app.get('elasticClient');
-  const articleDocument = await elasticClient.index({
-    index: config.searchIndex,
+
+  if(article.access_level == 'public') {
+    const result = await Promise.all(
+      index(article, true),
+      index(article, false)
+    );
+  } else {
+    const result = await index(article, true);
+  }
+}
+
+async function index(article, internal) {
+  const config = app.get('elasticsearch');
+  const elastic = app.get('elasticClient');
+  const articleDocument = await elastic.index({
+    index: internal ? config.searchIndex : `${config.searchIndex}-public`,
     refresh: true,
     id: article.id,
     document: {
@@ -18,5 +30,4 @@ export const registerEsIndex = async (context) => {
       allowed_departments: article.allowed_departments
     }
   });
-  console.log(articleDocument);
 }

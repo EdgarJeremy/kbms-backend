@@ -7,34 +7,44 @@ export class SearchService {
 
   async find(_params) {
     const config = this.app.get('elasticsearch');
-    const elasticSearch = this.app.get('elasticClient');
+    const elastic = this.app.get('elasticClient');
     const user = _params.user;
 
-    const conds = user ? {
-      should: [{
-        term: { allowed_departments: null }
-      }, {
-        term: { allowed_departments: [user.department_id] }
-      }]
-    } : {
-      must: [{
-        term: { access_level: 'public' }
-      }]
+    if (user) {
+      const data = await elastic.search({
+        index: config.searchIndex,
+        from: _params.query.from ? _params.query.from : 0,
+        size: _params.query.size ? _params.query.size : 10,
+        query: {
+          bool: {
+            must: {
+              multi_match: {
+                query: `*${_params.query.q}*`,
+                fields: ['headline^2', 'content']
+              },
+            },
+            should: [
+              { term: { allowed_departments: user.department_id } },
+              { term: { allowed_departments: null } }
+            ]
+          }
+        }
+      });
+      return data;
+    } else {
+      const data = await elastic.search({
+        index: config.searchIndex,
+        from: _params.query.from ? _params.query.from : 0,
+        size: _params.query.size ? _params.query.size : 10,
+        query: {
+          multi_match: {
+            query: `*${_params.query.q}*`,
+            fields: ['headline^2', 'content']
+          }
+        }
+      });
+      return data;
     }
-
-    const data = await elasticSearch.search({
-      index: config.index,
-      from: _params.query.from ? _params.query.from : 0,
-      size: _params.query.size ? _params.query.size : 10,
-      query: {
-        multi_match: {
-          query: `*${_params.query.q}*`,
-          fields: ['headline^2', 'content']
-        },
-        // bool: conds
-      }
-    });
-    return data;
   }
 
   async get(id, _params) { }
