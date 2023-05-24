@@ -23,7 +23,7 @@ export * from './articles.schema.js'
 // A configure function that registers the service and its hooks via `app.configure`
 export const articles = (app) => {
   // Register our service on the Feathers application
-  app.use(articlesPath, new ArticlesService(getOptions(app)), {
+  app.use(articlesPath, new ArticlesService(getOptions(app), app), {
     // A list of all methods this service exposes externally
     methods: articlesMethods,
     // You can add additional custom events to be sent to clients here

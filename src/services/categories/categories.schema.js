@@ -7,7 +7,9 @@ import { dataValidator, queryValidator } from '../../validators.js'
 export const categoriesSchema = Type.Object(
   {
     id: Type.Number(),
-    name: Type.String()
+    name: Type.String(),
+    created_at: Type.String(),
+    updated_at: Type.String()
   },
   { $id: 'Categories', additionalProperties: false }
 )
@@ -31,7 +33,7 @@ export const categoriesPatchValidator = getValidator(categoriesPatchSchema, data
 export const categoriesPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const categoriesQueryProperties = Type.Pick(categoriesSchema, ['id', 'name'])
+export const categoriesQueryProperties = Type.Pick(categoriesSchema, ['id', 'name', 'created_at', 'updated_at'])
 export const categoriesQuerySchema = Type.Intersect(
   [
     querySyntax(categoriesQueryProperties),

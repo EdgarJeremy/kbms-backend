@@ -9,6 +9,9 @@ export class SearchService {
     const config = this.app.get('elasticsearch');
     const elastic = this.app.get('elasticClient');
     const user = _params.user;
+    const q = _params.query.q;
+
+    q.split(' ').forEach((term) => { this.recordTerm(term) });
 
     if (user) {
       const data = await elastic.search({
@@ -19,7 +22,7 @@ export class SearchService {
           bool: {
             must: {
               multi_match: {
-                query: `*${_params.query.q}*`,
+                query: `*${q}*`,
                 fields: ['headline^2', 'content']
               },
             },
@@ -38,13 +41,21 @@ export class SearchService {
         size: _params.query.size ? _params.query.size : 10,
         query: {
           multi_match: {
-            query: `*${_params.query.q}*`,
+            query: `*${q}*`,
             fields: ['headline^2', 'content']
           }
         }
       });
       return data;
     }
+  }
+
+  async recordTerm(term) {
+    const found = (await this.app.service('terms').find({ query: { text: term.toLowerCase() } })).data[0];
+    if (!found)
+      await this.app.service('terms').create({ text: term.toLowerCase() });
+    else
+      await this.app.service('terms').patch(found.id, { freq: found.freq + 1 });
   }
 
   async get(id, _params) { }

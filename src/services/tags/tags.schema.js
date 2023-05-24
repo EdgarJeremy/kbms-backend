@@ -7,7 +7,9 @@ import { dataValidator, queryValidator } from '../../validators.js'
 export const tagsSchema = Type.Object(
   {
     id: Type.Number(),
-    name: Type.String()
+    name: Type.String(),
+    created_at: Type.String(),
+    updated_at: Type.String()
   },
   { $id: 'Tags', additionalProperties: false }
 )
@@ -31,7 +33,7 @@ export const tagsPatchValidator = getValidator(tagsPatchSchema, dataValidator)
 export const tagsPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const tagsQueryProperties = Type.Pick(tagsSchema, ['id', 'name'])
+export const tagsQueryProperties = Type.Pick(tagsSchema, ['id', 'name', 'created_at', 'updated_at'])
 export const tagsQuerySchema = Type.Intersect(
   [
     querySyntax(tagsQueryProperties),

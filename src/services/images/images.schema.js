@@ -9,7 +9,9 @@ export const imagesSchema = Type.Object(
     id: Type.Number(),
     data: Type.String(),
     name: Type.String(),
-    mime: Type.String()
+    mime: Type.String(),
+    created_at: Type.String(),
+    updated_at: Type.String()
   },
   { $id: 'Images', additionalProperties: false }
 )
@@ -44,7 +46,7 @@ export const imagesPatchValidator = getValidator(imagesPatchSchema, dataValidato
 export const imagesPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const imagesQueryProperties = Type.Pick(imagesSchema, ['id', 'text'])
+export const imagesQueryProperties = Type.Pick(imagesSchema, ['id', 'name', 'mime', 'created_at', 'updated_at'])
 export const imagesQuerySchema = Type.Intersect(
   [
     querySyntax(imagesQueryProperties),

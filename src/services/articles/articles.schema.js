@@ -5,7 +5,6 @@ import { dataValidator, queryValidator } from '../../validators.js'
 import { userSchema } from '../users/users.schema.js';
 import { departmentsSchema } from '../departments/departments.schema.js'
 import { categoriesSchema } from '../categories/categories.schema.js'
-import { tagsSchema } from '../tags/tags.schema.js';
 
 // Main data model schema
 export const articlesSchema = Type.Object(
@@ -20,10 +19,11 @@ export const articlesSchema = Type.Object(
     department: Type.Ref(departmentsSchema),
     category_id: Type.Number(),
     category: Type.Ref(categoriesSchema),
-    tag_id: Type.Number(),
-    tag: Type.Ref(tagsSchema),
+    tags: Type.Array(Type.Number()),
     access_level: Type.Union([Type.Literal('internal'), Type.Literal('public')]),
-    allowed_departments: Type.Array(Type.Number())
+    allowed_departments: Type.Array(Type.Number()),
+    created_at: Type.String(),
+    updated_at: Type.String()
   },
   { $id: 'Articles', additionalProperties: false }
 )
@@ -40,21 +40,19 @@ export const articlesResolver = resolve({
     return null;
   }),
   category: virtual(async (data, context) => {
-    if(data.category_id)
+    if (data.category_id)
       return await context.app.service('categories').get(data.category_id)
     return null;
   }),
-  tag: virtual(async (data, context) => {
-    if(data.tag_id)
-      return await context.app.service('tags').get(data.tag_id);
-    return null;
+  tags: virtual(async (data, context) => {
+    return (await context.app.service('article-tags').find({ query: { article_id: data.id } })).data;
   })
 })
 
 export const articlesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'content', 'content_raw', 'access_level', 'content_raw'], {
+export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'content', 'content_raw', 'access_level', 'content_raw', 'category_id', 'tags'], {
   $id: 'ArticlesData'
 })
 export const articlesDataValidator = getValidator(articlesDataSchema, dataValidator)
@@ -70,7 +68,7 @@ export const articlesPatchValidator = getValidator(articlesPatchSchema, dataVali
 export const articlesPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'department_id', 'access_level'])
+export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'department_id', 'access_level', 'created_at', 'updated_at'])
 export const articlesQuerySchema = Type.Intersect(
   [
     querySyntax(articlesQueryProperties),

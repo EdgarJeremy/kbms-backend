@@ -14,7 +14,9 @@ export const userSchema = Type.Object(
     password: Type.Optional(Type.String()),
     type: Type.Union([Type.Literal('Administrator'), Type.Literal('Department')]),
     department_id: Type.Optional(Type.Number()),
-    department: Type.Optional(Type.Ref(departmentsSchema))
+    department: Type.Optional(Type.Ref(departmentsSchema)),
+    created_at: Type.String(),
+    updated_at: Type.String()
   },
   { $id: 'User', additionalProperties: false }
 )
@@ -51,7 +53,7 @@ export const userPatchResolver = resolve({
 })
 
 // Schema for allowed query properties
-export const userQueryProperties = Type.Pick(userSchema, ['id', 'name', 'username', 'type', 'department_id'])
+export const userQueryProperties = Type.Pick(userSchema, ['id', 'name', 'username', 'type', 'department_id', 'created_at', 'updated_at'])
 export const userQuerySchema = Type.Intersect(
   [
     querySyntax(userQueryProperties),
