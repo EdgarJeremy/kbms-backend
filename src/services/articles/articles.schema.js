@@ -21,7 +21,7 @@ export const articlesSchema = Type.Object(
     category: Type.Ref(categoriesSchema),
     tags: Type.Array(Type.Number()),
     access_level: Type.Union([Type.Literal('internal'), Type.Literal('public')]),
-    allowed_departments: Type.Array(Type.Number()),
+    allowed_departments: Type.Optional(Type.Array(Type.Number())),
     created_at: Type.String(),
     updated_at: Type.String()
   },
@@ -52,12 +52,13 @@ export const articlesResolver = resolve({
 export const articlesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'content', 'content_raw', 'access_level', 'content_raw', 'category_id', 'tags'], {
+export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'content', 'content_raw', 'access_level', 'content_raw', 'category_id', 'tags', 'allowed_departments'], {
   $id: 'ArticlesData'
 })
 export const articlesDataValidator = getValidator(articlesDataSchema, dataValidator)
 export const articlesDataResolver = resolve({
-  user_id: async (value, data, context) => context.params.users.id
+  user_id: async (value, data, context) => context.params.users.id,
+  allowed_departments: async (value, data, context) => JSON.stringify(value)
 })
 
 // Schema for updating existing entries
@@ -65,7 +66,9 @@ export const articlesPatchSchema = Type.Partial(articlesSchema, {
   $id: 'ArticlesPatch'
 })
 export const articlesPatchValidator = getValidator(articlesPatchSchema, dataValidator)
-export const articlesPatchResolver = resolve({})
+export const articlesPatchResolver = resolve({
+  allowed_departments: async (value, data, context) => JSON.stringify(value)
+})
 
 // Schema for allowed query properties
 export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'department_id', 'access_level', 'created_at', 'updated_at'])

@@ -1,3 +1,9 @@
+import { allSearch } from './all-search/all-search.js'
+
+import { aggregators } from './aggregators/aggregators.js'
+
+import { keywords } from './keywords/keywords.js'
+
 import { terms } from './terms/terms.js'
 
 import { articleTags } from './article-tags/article-tags.js'
@@ -17,6 +23,12 @@ import { articles } from './articles/articles.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(allSearch)
+
+  app.configure(aggregators)
+
+  app.configure(keywords)
+
   app.configure(terms)
 
   app.configure(articleTags)

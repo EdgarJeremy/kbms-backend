@@ -7,8 +7,6 @@ import { dataValidator, queryValidator } from '../../validators.js'
 export const searchSchema = Type.Object(
   {
     id: Type.Number(),
-    headline: Type.String(),
-    content: Type.String(),
     q: Type.String(),
     size: Type.Number(),
     from: Type.Number()
@@ -21,7 +19,7 @@ export const searchResolver = resolve({})
 export const searchExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const searchDataSchema = Type.Pick(searchSchema, ['headline', 'content'], {
+export const searchDataSchema = Type.Pick(searchSchema, [], {
   $id: 'SearchData'
 })
 export const searchDataValidator = getValidator(searchDataSchema, dataValidator)

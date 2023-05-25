@@ -14,7 +14,7 @@ import {
 import { SearchService, getOptions } from './search.class.js'
 
 export const searchPath = 'search'
-export const searchMethods = ['find', 'get', 'create', 'patch', 'remove']
+export const searchMethods = ['find']
 
 export * from './search.class.js'
 export * from './search.schema.js'
