@@ -29,14 +29,15 @@ export class AllSearchService {
           should: [
             { term: { allowed_departments: user.department_id ? user.department_id : -1 } },
             { term: { allowed_departments: -1 } }
-          ]
+          ],
+          minimum_should_match: 1
         }
       }
     });
     return data;
   }
 
-  
+
   async recordTerm(term) {
     const found = (await this.app.service('terms').find({ query: { text: term.toLowerCase().trim() } })).data[0];
     if (!found)

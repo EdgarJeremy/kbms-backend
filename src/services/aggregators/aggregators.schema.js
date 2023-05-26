@@ -7,7 +7,10 @@ import { dataValidator, queryValidator } from '../../validators.js'
 export const aggregatorsSchema = Type.Object(
   {
     id: Type.Number(),
-    text: Type.String()
+    type: Type.Union([Type.Literal('keyword')]),
+    from: Type.String({ format: 'date' }),
+    to: Type.String({ format: 'date' }),
+    data: Type.Array(Type.Object({ count: Type.Number(), date: Type.String() }))
   },
   { $id: 'Aggregators', additionalProperties: false }
 )
@@ -31,7 +34,7 @@ export const aggregatorsPatchValidator = getValidator(aggregatorsPatchSchema, da
 export const aggregatorsPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const aggregatorsQueryProperties = Type.Pick(aggregatorsSchema, ['id', 'text'])
+export const aggregatorsQueryProperties = Type.Pick(aggregatorsSchema, ['id', 'from', 'to'])
 export const aggregatorsQuerySchema = Type.Intersect(
   [
     querySyntax(aggregatorsQueryProperties),

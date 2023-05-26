@@ -7,7 +7,7 @@ export async function up(knex) {
     table.increments('id')
     table.string('text')
     table.integer('freq').defaultTo(0)
-    table.timestamps(true)
+    table.timestamps(true, true)
   })
 }
 
