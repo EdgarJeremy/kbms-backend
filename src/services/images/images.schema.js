@@ -49,7 +49,11 @@ export const imagesPatchResolver = resolve({})
 export const imagesQueryProperties = Type.Pick(imagesSchema, ['id', 'name', 'mime', 'created_at', 'updated_at'])
 export const imagesQuerySchema = Type.Intersect(
   [
-    querySyntax(imagesQueryProperties),
+    querySyntax(imagesQueryProperties, {
+      name: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

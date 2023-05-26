@@ -35,7 +35,11 @@ export const departmentsPatchResolver = resolve({})
 export const departmentsQueryProperties = Type.Pick(departmentsSchema, ['id', 'name', 'short_name'])
 export const departmentsQuerySchema = Type.Intersect(
   [
-    querySyntax(departmentsQueryProperties),
+    querySyntax(departmentsQueryProperties, {
+      name: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

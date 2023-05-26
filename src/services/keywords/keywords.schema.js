@@ -36,7 +36,11 @@ export const keywordsPatchResolver = resolve({})
 export const keywordsQueryProperties = Type.Pick(keywordsSchema, ['id', 'text', 'created_at', 'updated_at'])
 export const keywordsQuerySchema = Type.Intersect(
   [
-    querySyntax(keywordsQueryProperties),
+    querySyntax(keywordsQueryProperties, {
+      text: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

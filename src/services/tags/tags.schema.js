@@ -8,6 +8,7 @@ export const tagsSchema = Type.Object(
   {
     id: Type.Number(),
     name: Type.String(),
+    freq: Type.Number(),
     created_at: Type.String(),
     updated_at: Type.String()
   },
@@ -33,10 +34,14 @@ export const tagsPatchValidator = getValidator(tagsPatchSchema, dataValidator)
 export const tagsPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const tagsQueryProperties = Type.Pick(tagsSchema, ['id', 'name', 'created_at', 'updated_at'])
+export const tagsQueryProperties = Type.Pick(tagsSchema, ['id', 'name', 'freq', 'created_at', 'updated_at'])
 export const tagsQuerySchema = Type.Intersect(
   [
-    querySyntax(tagsQueryProperties),
+    querySyntax(tagsQueryProperties, {
+      name: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

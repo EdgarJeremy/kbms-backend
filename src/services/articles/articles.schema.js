@@ -71,10 +71,14 @@ export const articlesPatchResolver = resolve({
 })
 
 // Schema for allowed query properties
-export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'department_id', 'access_level', 'created_at', 'updated_at'])
+export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'category_id', 'department_id', 'access_level', 'created_at', 'updated_at'])
 export const articlesQuerySchema = Type.Intersect(
   [
-    querySyntax(articlesQueryProperties),
+    querySyntax(articlesQueryProperties, {
+      headline: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

@@ -37,7 +37,11 @@ export const termsPatchResolver = resolve({})
 export const termsQueryProperties = Type.Pick(termsSchema, ['id', 'text', 'freq', 'created_at', 'updated_at'])
 export const termsQuerySchema = Type.Intersect(
   [
-    querySyntax(termsQueryProperties),
+    querySyntax(termsQueryProperties, {
+      text: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

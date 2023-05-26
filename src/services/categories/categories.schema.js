@@ -8,6 +8,7 @@ export const categoriesSchema = Type.Object(
   {
     id: Type.Number(),
     name: Type.String(),
+    freq: Type.Number(),
     created_at: Type.String(),
     updated_at: Type.String()
   },
@@ -33,10 +34,14 @@ export const categoriesPatchValidator = getValidator(categoriesPatchSchema, data
 export const categoriesPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const categoriesQueryProperties = Type.Pick(categoriesSchema, ['id', 'name', 'created_at', 'updated_at'])
+export const categoriesQueryProperties = Type.Pick(categoriesSchema, ['id', 'name', 'freq', 'created_at', 'updated_at'])
 export const categoriesQuerySchema = Type.Intersect(
   [
-    querySyntax(categoriesQueryProperties),
+    querySyntax(categoriesQueryProperties,{
+      name: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],

@@ -56,7 +56,11 @@ export const userPatchResolver = resolve({
 export const userQueryProperties = Type.Pick(userSchema, ['id', 'name', 'username', 'type', 'department_id', 'created_at', 'updated_at'])
 export const userQuerySchema = Type.Intersect(
   [
-    querySyntax(userQueryProperties),
+    querySyntax(userQueryProperties, {
+      name: {
+        $ilike: Type.String()
+      }
+    }),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
