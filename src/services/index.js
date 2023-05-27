@@ -1,3 +1,5 @@
+import { popular } from './popular/popular.js'
+
 import { allSearch } from './all-search/all-search.js'
 
 import { aggregators } from './aggregators/aggregators.js'
@@ -23,6 +25,8 @@ import { articles } from './articles/articles.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(popular)
+
   app.configure(allSearch)
 
   app.configure(aggregators)
