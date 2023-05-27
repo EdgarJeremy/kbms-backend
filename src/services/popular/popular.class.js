@@ -4,13 +4,14 @@ export class PopularService {
   constructor(options, app) {
     this.options = options
     this.app = app;
-    this.limit = 10;
+    this.limit = 5;
   }
 
   async get(id, _params) {
     if (id === 'keyword') return await this.keyword();
     if (id === 'category') return await this.category();
-    if (id === 'terms') return await this.terms();
+    if (id === 'term') return await this.term();
+    if(id ==='tag') return await this.tag();
 
     throw new Error('Invalid type');
   }
@@ -27,9 +28,14 @@ export class PopularService {
     return result;
   }
 
-  async terms() {
+  async term() {
     const knex = this.app.get('postgresqlClient');
     const result = await knex('terms').select('text as value', 'freq').limit(this.limit).orderBy('freq', 'desc')
+    return result;
+  }
+  async tag() {
+    const knex = this.app.get('postgresqlClient');
+    const result = await knex('tags').select('name as value', 'freq').limit(this.limit).orderBy('freq', 'desc')
     return result;
   }
 

@@ -33,7 +33,7 @@ export const popular = (app) => {
   app.service(popularPath).hooks({
     around: {
       all: [
-        // authenticate('jwt'),
+        authenticate('jwt'),
         schemaHooks.resolveExternal(popularExternalResolver),
         schemaHooks.resolveResult(popularResolver)
       ]
