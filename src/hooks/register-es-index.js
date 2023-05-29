@@ -1,4 +1,5 @@
 import { stripHtml } from 'string-strip-html';
+import _ from 'lodash';
 
 export const registerEsIndex = async (context) => {
   const app = context.app;
@@ -26,7 +27,7 @@ export const registerEsIndex = async (context) => {
         user_id: article.user_id,
         department_id: article.department_id ? article.department_id : -1,
         access_level: article.access_level,
-        allowed_departments: article.allowed_departments ? article.allowed_departments : -1
+        allowed_departments: !_.isEmpty(article.allowed_departments) ? article.allowed_departments : -1
       }
     });
   }
