@@ -5,6 +5,7 @@ import { dataValidator, queryValidator } from '../../validators.js'
 import { userSchema } from '../users/users.schema.js';
 import { departmentsSchema } from '../departments/departments.schema.js'
 import { categoriesSchema } from '../categories/categories.schema.js'
+import { attachmentsSchema } from '../attachments/attachments.schema.js'
 
 // Main data model schema
 export const articlesSchema = Type.Object(
@@ -20,6 +21,7 @@ export const articlesSchema = Type.Object(
     category_id: Type.Number(),
     category: Type.Ref(categoriesSchema),
     tags: Type.Array(Type.Number()),
+    attachments: Type.Array(Type.Ref(attachmentsSchema)),
     access_level: Type.Union([Type.Literal('internal'), Type.Literal('public')]),
     allowed_departments: Type.Optional(Type.Array(Type.Number())),
     created_at: Type.String(),
@@ -46,6 +48,9 @@ export const articlesResolver = resolve({
   }),
   tags: virtual(async (data, context) => {
     return (await context.app.service('article-tags').find({ query: { article_id: data.id } })).data;
+  }),
+  attachments: virtual(async (data, context) => {
+    return (await context.app.service('attachments').find({ query: { article_id: data.id } })).data;
   })
 })
 

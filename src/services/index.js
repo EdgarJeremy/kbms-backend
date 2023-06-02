@@ -1,3 +1,9 @@
+import { related } from './related/related.js'
+
+import { uploads } from './uploads/uploads.js'
+
+import { attachments } from './attachments/attachments.js'
+
 import { popular } from './popular/popular.js'
 
 import { allSearch } from './all-search/all-search.js'
@@ -25,6 +31,12 @@ import { articles } from './articles/articles.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(related)
+
+  app.configure(uploads)
+
+  app.configure(attachments)
+
   app.configure(popular)
 
   app.configure(allSearch)

@@ -4,7 +4,7 @@ export class PopularService {
   constructor(options, app) {
     this.options = options
     this.app = app;
-    this.limit = 5;
+    this.limit = 6;
   }
 
   async get(id, _params) {

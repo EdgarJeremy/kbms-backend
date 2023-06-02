@@ -10,6 +10,9 @@ import express, {
   errorHandler
 } from '@feathersjs/express'
 
+import path from 'path';
+import fs from 'fs';
+
 import configuration from '@feathersjs/configuration'
 import socketio from '@feathersjs/socketio'
 import { configurationValidator } from './configuration.js'
@@ -43,6 +46,25 @@ app.use('/cdn/:service/:id/:col', async (req, res, next) => {
     res.setHeader('Content-type', data.mime ? data.mime : mime);
     res.send(data[col]);
   } catch (e) {
+    res.status(404);
+    res.json({ message: 'File not found' });
+  }
+})
+
+app.use('/storage/attachments/:id', async (req, res, next) => {
+  const { id } = req.params;
+  let mime = 'image/jpeg';
+
+  try {
+    const data = await app.service('attachments').get(id);
+    const ext = data.name.split('.')[data.name.split('.').length - 1];
+    const file = fs.readFileSync(path.resolve(`./storage/attachment-${id}.${ext}`))
+
+    res.setHeader('Content-Disposition', 'attachment; filename=' + data.name);
+    res.setHeader('Content-Type', data.mime ? data.mime : mime);
+    res.send(file)
+  } catch (e) {
+    console.log(e);
     res.status(404);
     res.json({ message: 'File not found' });
   }

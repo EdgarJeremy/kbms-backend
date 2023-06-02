@@ -11,5 +11,12 @@ export const elasticSearch = (app) => {
       rejectUnauthorized: false
     } : undefined
   });
+  // elasticClient.search({
+  //   query: {
+  //     more_like_this: {
+  //       fields: []
+  //     }
+  //   }
+  // })
   app.set('elasticClient', elasticClient);
 }
