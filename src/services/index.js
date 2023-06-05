@@ -1,3 +1,7 @@
+import { news } from './news/news.js'
+
+import { advertisements } from './advertisements/advertisements.js'
+
 import { related } from './related/related.js'
 
 import { uploads } from './uploads/uploads.js'
@@ -31,6 +35,10 @@ import { articles } from './articles/articles.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(news)
+
+  app.configure(advertisements)
+
   app.configure(related)
 
   app.configure(uploads)
