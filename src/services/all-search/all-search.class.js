@@ -14,6 +14,11 @@ export class AllSearchService {
     this.recordKeyword(q);
     q.split(' ').forEach((term) => { this.recordTerm(term) });
 
+    const { category_id, tags } = _params.query;
+    const adv_search = [];
+    if (category_id) adv_search.push({ term: { category_id } });
+    if (tags) adv_search.push({ terms: { tags } });
+
     const data = await elastic.search({
       index: config.searchIndex,
       from: _params.query.from ? _params.query.from : 0,
@@ -26,6 +31,7 @@ export class AllSearchService {
               fields: ['headline^2', 'content']
             },
           },
+          ...adv_search,
           should: [
             { term: { allowed_departments: user.department_id ? user.department_id : -1 } },
             { term: { allowed_departments: -1 } }

@@ -7,6 +7,15 @@ export class ArticlesService extends KnexService {
     this.app = app;
   }
 
+  async get(id, params) {
+    const article = await super.get(id, params);
+    const user = params.users;
+    if (article.access_level === 'internal')
+      if (!user) throw new Error('Access denied');
+
+    return article;
+  }
+
   async create(data) {
     const tags = [...data.tags];
     delete data.tags;

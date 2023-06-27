@@ -15,6 +15,7 @@ import { ArticlesService, getOptions } from './articles.class.js'
 import { registerEsIndex } from '../../hooks/register-es-index.js';
 import { updateEsIndex } from '../../hooks/update-es-index.js';
 import { removeEsIndex } from '../../hooks/remove-es-index.js';
+import { allowAnonymous } from '../../hooks/allow-anonymous.js';
 
 export const articlesPath = 'articles'
 export const articlesMethods = ['find', 'get', 'create', 'patch', 'remove']
@@ -49,7 +50,7 @@ export const articles = (app) => {
         schemaHooks.resolveQuery(articlesQueryResolver)
       ],
       find: [],
-      get: [],
+      get: [allowAnonymous, authenticate('jwt', 'anonymous')],
       create: [
         schemaHooks.validateData(articlesDataValidator),
         schemaHooks.resolveData(articlesDataResolver),

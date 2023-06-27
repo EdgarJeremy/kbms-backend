@@ -8,6 +8,8 @@ export const allSearchSchema = Type.Object(
   {
     id: Type.Number(),
     q: Type.String(),
+    category_id: Type.Number(),
+    tags: Type.Array(Type.Number()),
     size: Type.Number(),
     from: Type.Number()
   },
@@ -33,7 +35,7 @@ export const allSearchPatchValidator = getValidator(allSearchPatchSchema, dataVa
 export const allSearchPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const allSearchQueryProperties = Type.Pick(allSearchSchema, ['q', 'from', 'size'])
+export const allSearchQueryProperties = Type.Pick(allSearchSchema, ['q', 'category_id', 'tags', 'from', 'size'])
 export const allSearchQuerySchema = Type.Intersect(
   [
     querySyntax(allSearchQueryProperties),
