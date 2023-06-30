@@ -13,6 +13,7 @@ export const userSchema = Type.Object(
     username: Type.String(),
     password: Type.Optional(Type.String()),
     type: Type.Union([Type.Literal('Administrator'), Type.Literal('Department')]),
+    privilege: Type.Union([Type.Literal('review'), Type.Literal('verification')]),
     department_id: Type.Optional(Type.Number()),
     department: Type.Optional(Type.Ref(departmentsSchema)),
     created_at: Type.String(),
@@ -35,7 +36,7 @@ export const userExternalResolver = resolve({
 })
 
 // Schema for creating new entries
-export const userDataSchema = Type.Pick(userSchema, ['name', 'username', 'password', 'type', 'department_id'], {
+export const userDataSchema = Type.Pick(userSchema, ['name', 'username', 'password', 'type', 'privilege', 'department_id'], {
   $id: 'UserData'
 })
 export const userDataValidator = getValidator(userDataSchema, dataValidator)
@@ -53,7 +54,7 @@ export const userPatchResolver = resolve({
 })
 
 // Schema for allowed query properties
-export const userQueryProperties = Type.Pick(userSchema, ['id', 'name', 'username', 'type', 'department_id', 'created_at', 'updated_at'])
+export const userQueryProperties = Type.Pick(userSchema, ['id', 'name', 'username', 'type', 'privilege', 'department_id', 'created_at', 'updated_at'])
 export const userQuerySchema = Type.Intersect(
   [
     querySyntax(userQueryProperties, {

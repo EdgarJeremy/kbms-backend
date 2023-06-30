@@ -14,6 +14,8 @@ export const articlesSchema = Type.Object(
     headline: Type.String(),
     content: Type.String(),
     content_raw: Type.String(),
+    status: Type.Union([Type.Literal('draft'), Type.Literal('review'), Type.Literal('verification'), Type.Literal('complete')]),
+    reject_note: Type.String(),
     user_id: Type.Number(),
     user: Type.Ref(userSchema),
     department_id: Type.Optional(Type.Number()),
@@ -24,6 +26,8 @@ export const articlesSchema = Type.Object(
     attachments: Type.Array(Type.Ref(attachmentsSchema)),
     access_level: Type.Union([Type.Literal('internal'), Type.Literal('public')]),
     allowed_departments: Type.Optional(Type.Array(Type.Number())),
+    verified_by_id: Type.Number(),
+    rejected_by_id: Type.Number(),
     created_at: Type.String(),
     updated_at: Type.String()
   },
@@ -51,7 +55,17 @@ export const articlesResolver = resolve({
   }),
   attachments: virtual(async (data, context) => {
     return (await context.app.service('attachments').find({ query: { article_id: data.id } })).data;
-  })
+  }),
+  verified_by: virtual(async (data, context) => {
+    if (data.verified_by_id)
+      return await context.app.service('users').get(data.verified_by_id);
+    return null;
+  }),
+  rejected_by: virtual(async (data, context) => {
+    if (data.rejected_by_id)
+      return await context.app.service('users').get(data.rejected_by_id);
+    return null;
+  }),
 })
 
 export const articlesExternalResolver = resolve({})
@@ -72,11 +86,19 @@ export const articlesPatchSchema = Type.Partial(articlesSchema, {
 })
 export const articlesPatchValidator = getValidator(articlesPatchSchema, dataValidator)
 export const articlesPatchResolver = resolve({
-  allowed_departments: async (value, data, context) => JSON.stringify(value)
+  allowed_departments: async (value, data, context) => JSON.stringify(value),
+  verified_by_id: virtual(async (data, context) => {
+    if (data.status === 'complete')
+      data.verified_by_id = context.params.users.id
+  }),
+  rejected_by_id: virtual(async (data, context) => {
+    if (data.status === 'draft')
+      data.rejected_by_id = context.params.users.id
+  })
 })
 
 // Schema for allowed query properties
-export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'category_id', 'department_id', 'access_level', 'created_at', 'updated_at'])
+export const articlesQueryProperties = Type.Pick(articlesSchema, ['id', 'headline', 'content', 'status', 'reject_note', 'category_id', 'department_id', 'access_level', 'created_at', 'updated_at'])
 export const articlesQuerySchema = Type.Intersect(
   [
     querySyntax(articlesQueryProperties, {

@@ -63,7 +63,7 @@ export const articles = (app) => {
     },
     after: {
       all: [],
-      create: [registerEsIndex],
+      create: [],
       patch: [updateEsIndex],
       remove: [removeEsIndex]
     },
