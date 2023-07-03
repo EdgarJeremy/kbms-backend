@@ -89,11 +89,11 @@ export const articlesPatchResolver = resolve({
   allowed_departments: async (value, data, context) => JSON.stringify(value),
   verified_by_id: virtual(async (data, context) => {
     if (data.status === 'complete')
-      data.verified_by_id = context.params.users.id
+      return context.params.users.id
   }),
   rejected_by_id: virtual(async (data, context) => {
     if (data.status === 'draft')
-      data.rejected_by_id = context.params.users.id
+      return context.params.users.id
   })
 })
 

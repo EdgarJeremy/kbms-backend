@@ -7,7 +7,9 @@ export const removeEsIndex = async (context) => {
   async function remove(article) {
     const config = app.get('elasticsearch');
     const elastic = app.get('elasticClient');
-    await elastic.delete({ index: config.searchIndex, id: article.id });
-    await elastic.delete({ index: config.searchIndex + '-public', id: article.id });
+    try {
+      await elastic.delete({ index: config.searchIndex, id: article.id });
+      await elastic.delete({ index: config.searchIndex + '-public', id: article.id });
+    } catch(e) {}
   }
 }

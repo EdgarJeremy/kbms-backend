@@ -36,7 +36,7 @@ export const userExternalResolver = resolve({
 })
 
 // Schema for creating new entries
-export const userDataSchema = Type.Pick(userSchema, ['name', 'username', 'password', 'type', 'privilege', 'department_id'], {
+export const userDataSchema = Type.Pick(userSchema, ['name', 'username', 'password', 'type', 'department_id'], {
   $id: 'UserData'
 })
 export const userDataValidator = getValidator(userDataSchema, dataValidator)

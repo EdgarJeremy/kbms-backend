@@ -1,4 +1,5 @@
 import { stripHtml } from 'string-strip-html';
+import _ from 'lodash';
 
 export const updateEsIndex = async (context) => {
   const app = context.app;

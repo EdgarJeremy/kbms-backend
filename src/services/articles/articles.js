@@ -12,7 +12,6 @@ import {
   articlesQueryResolver
 } from './articles.schema.js'
 import { ArticlesService, getOptions } from './articles.class.js'
-import { registerEsIndex } from '../../hooks/register-es-index.js';
 import { updateEsIndex } from '../../hooks/update-es-index.js';
 import { removeEsIndex } from '../../hooks/remove-es-index.js';
 import { allowAnonymous } from '../../hooks/allow-anonymous.js';

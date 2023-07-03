@@ -29,17 +29,20 @@ export class ArticlesService extends KnexService {
 
   async patch(id, data) {
     data.allowed_departments = null;
-    const tags = [...data.tags];
+    let tags = [];
+    if (data.tags) tags = [...data.tags]
     delete data.tags;
     data.updated_at = new Date();
     const article = await super.patch(id, data);
     const ats = (await this.app.service('article-tags').find({ query: { article_id: id } }));
-    for (let i = 0; i < ats.data.length; i++) {
-      await this.app.service('article-tags').remove(ats.data[i].id);
-    }
-    for (let i = 0; i < tags.length; i++) {
-      const tag = tags[i]
-      await this.app.service('article-tags').create({ tag_id: tag, article_id: article.id })
+    if (tags.length > 0) {
+      for (let i = 0; i < ats.data.length; i++) {
+        await this.app.service('article-tags').remove(ats.data[i].id);
+      }
+      for (let i = 0; i < tags.length; i++) {
+        const tag = tags[i]
+        await this.app.service('article-tags').create({ tag_id: tag, article_id: article.id })
+      }
     }
     return article;
   }
