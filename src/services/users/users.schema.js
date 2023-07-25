@@ -16,6 +16,7 @@ export const userSchema = Type.Object(
     privilege: Type.Optional(Type.Union([Type.Literal('review'), Type.Literal('verification')])),
     department_id: Type.Optional(Type.Number()),
     department: Type.Optional(Type.Ref(departmentsSchema)),
+    old_password: Type.Optional(Type.String()),
     created_at: Type.String(),
     updated_at: Type.String()
   },

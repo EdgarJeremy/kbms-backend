@@ -76,6 +76,7 @@ export const articlesDataSchema = Type.Pick(articlesSchema, ['headline', 'conten
 })
 export const articlesDataValidator = getValidator(articlesDataSchema, dataValidator)
 export const articlesDataResolver = resolve({
+  department_id: async (value, data, context) => context.params.users.department_id,
   user_id: async (value, data, context) => context.params.users.id,
   allowed_departments: async (value, data, context) => JSON.stringify(value)
 })

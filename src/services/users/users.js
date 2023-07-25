@@ -13,6 +13,7 @@ import {
   userQueryResolver
 } from './users.schema.js'
 import { UserService, getOptions } from './users.class.js'
+import { validatePassword } from '../../hooks/validate-password.js'
 
 export const userPath = 'users'
 export const userMethods = ['find', 'get', 'create', 'patch', 'remove']
@@ -45,7 +46,7 @@ export const user = (app) => {
       find: [],
       get: [],
       create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
-      patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
+      patch: [validatePassword, schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
       remove: []
     },
     after: {
