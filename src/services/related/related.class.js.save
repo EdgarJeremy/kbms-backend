@@ -14,7 +14,7 @@ export class RelatedService {
       size: 6,
       query: {
         more_like_this: {
-	  fields: ['content', 'headline'],
+          fields: ['headline'],
           like: [{
             _index: config.searchIndex,
             _id: `${article_id}`

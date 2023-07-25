@@ -26,7 +26,9 @@ import { authentication } from './authentication.js'
 import { services } from './services/index.js'
 import { channels } from './channels.js'
 
+
 const app = express(feathers())
+
 
 // Load app configuration
 app.configure(configuration(configurationValidator))
